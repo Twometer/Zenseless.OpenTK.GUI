@@ -37,12 +37,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Zenseless.OpenTK" Version="0.1.83" />
     <PackageReference Include="ImGui.NET" Version="1.90.9.1" />
+    <PackageReference Include="OpenTK" Version="4.8.2" />
   </ItemGroup>
-
-  <Target Name="PostPack" AfterTargets="Pack" Condition=" '$(APPVEYOR)' == '' ">
-    <Exec Command="dotnet nuget push bin\**.nupkg  -s $(AppData)\..\Local\Temp\NuGetScratch" />
-  </Target>
 
 </Project>
