@@ -12,71 +12,87 @@ namespace Zenseless.OpenTK.GUI;
 /// </summary>
 public class ImGuiInput
 {
-	/// <summary>
-	/// Create a new instance
-	/// </summary>
-	/// <param name="window">A <see cref="GameWindow"/> for connecting input and update event handler.</param>
-	public ImGuiInput(GameWindow window)
-	{
-		ImGuiHelper.AssureContextCreated();
+    private GameWindow _gameWindow;
 
-		ImGuiIOPtr io = ImGui.GetIO();
-		io.DeltaTime = 1f / 60f;
+    internal float WindowScale => _gameWindow.TryGetCurrentMonitorScale(out var horiz, out var vert)
+        ? Math.Max(horiz, vert)
+        : 1.0f;
 
-		window.TextInput += args => io.AddInputCharacter((uint)args.Unicode);
-		window.UpdateFrame += args => io.DeltaTime = (float)args.Time;
-		window.KeyDown += args => KeyEvent(args.Key, true);
-		window.KeyUp += args => KeyEvent(args.Key, false);
-		window.MouseDown += args => MouseEvent(args.Button, true);
-		window.MouseUp += args => MouseEvent(args.Button, false);
-		window.MouseMove += args => io.AddMousePosEvent(args.X, args.Y);
-		window.MouseWheel += args => io.AddMouseWheelEvent(args.OffsetX, args.OffsetY);
-	}
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    /// <param name="window">A <see cref="GameWindow"/> for connecting input and update event handler.</param>
+    public ImGuiInput(GameWindow window)
+    {
+        _gameWindow = window;
+        ImGuiHelper.AssureContextCreated();
 
-	private static void MouseEvent(MouseButton button, bool down)
-	{
-		ImGuiIOPtr io = ImGui.GetIO();
-		io.AddMouseButtonEvent((int) button, down);
-	}
+        ImGuiIOPtr io = ImGui.GetIO();
+        io.DeltaTime = 1f / 60f;
 
-	private static void KeyEvent(Keys key, bool down)
-	{
-		void KeyEvent(ImGuiKey imGuiKey)
-		{
-			ImGuiIOPtr io = ImGui.GetIO();
-			io.AddKeyEvent(imGuiKey, down);
-		}
 
-		if(keyMapping.TryGetValue(key, out var value))
-		{
-			KeyEvent(value);
-		}
-		//TODO: Report unknown key events
-	}
+        window.TextInput += args => io.AddInputCharacter((uint)args.Unicode);
+        window.UpdateFrame += args => io.DeltaTime = (float)args.Time;
+        window.KeyDown += args => KeyEvent(args.Key, true);
+        window.KeyUp += args => KeyEvent(args.Key, false);
+        window.MouseDown += args => MouseEvent(args.Button, true);
+        window.MouseUp += args => MouseEvent(args.Button, false);
+        window.MouseMove += args =>
+        {
+            var scale = WindowScale;
+            io.AddMousePosEvent(args.X * scale, args.Y * scale);
+        };
+        window.MouseWheel += args => io.AddMouseWheelEvent(args.OffsetX, args.OffsetY);
+    }
 
-	private static readonly Dictionary<Keys, ImGuiKey> keyMapping = CreateKeyMapping();
+    private static void MouseEvent(MouseButton button, bool down)
+    {
+        ImGuiIOPtr io = ImGui.GetIO();
+        io.AddMouseButtonEvent((int)button, down);
+    }
 
-	private static Dictionary<Keys, ImGuiKey> CreateKeyMapping()
-	{
-		Dictionary<Keys, ImGuiKey> mapping = [];
-		var imguiKeys = Enum.GetNames<ImGuiKey>().Select(name => name.ToLowerInvariant()).Zip(Enum.GetValues<ImGuiKey>(), (Name, Key) => (Name, Key)).ToList();
-		var opentkKeys = Enum.GetNames<Keys>().Select(name => name.ToLowerInvariant()).Zip(Enum.GetValues<Keys>(), (Name, Key) => (Name, Key)).ToList();
-		// set exact case-invariant name matches
-		foreach (var imgui in imguiKeys)
-		{
-			foreach (var (Name, Key) in opentkKeys.Where(d => d.Name == imgui.Name))
-			{
-				mapping[Key] = imgui.Key;
-			}
-		}
-		mapping[Keys.Left] = ImGuiKey.LeftArrow;
-		mapping[Keys.Right] = ImGuiKey.RightArrow;
-		mapping[Keys.Up] = ImGuiKey.UpArrow;
-		mapping[Keys.Down] = ImGuiKey.DownArrow;
-		for (int i = 0; i < 10; i++)
-		{
-			mapping[Keys.D0 + i] = ImGuiKey._0 + i;
-		}
-		return mapping;
-	}
+    private static void KeyEvent(Keys key, bool down)
+    {
+        void KeyEvent(ImGuiKey imGuiKey)
+        {
+            ImGuiIOPtr io = ImGui.GetIO();
+            io.AddKeyEvent(imGuiKey, down);
+        }
+
+        if (keyMapping.TryGetValue(key, out var value))
+        {
+            KeyEvent(value);
+        }
+        //TODO: Report unknown key events
+    }
+
+    private static readonly Dictionary<Keys, ImGuiKey> keyMapping = CreateKeyMapping();
+
+    private static Dictionary<Keys, ImGuiKey> CreateKeyMapping()
+    {
+        Dictionary<Keys, ImGuiKey> mapping = [];
+        var imguiKeys = Enum.GetNames<ImGuiKey>().Select(name => name.ToLowerInvariant())
+            .Zip(Enum.GetValues<ImGuiKey>(), (Name, Key) => (Name, Key)).ToList();
+        var opentkKeys = Enum.GetNames<Keys>().Select(name => name.ToLowerInvariant())
+            .Zip(Enum.GetValues<Keys>(), (Name, Key) => (Name, Key)).ToList();
+        // set exact case-invariant name matches
+        foreach (var imgui in imguiKeys)
+        {
+            foreach (var (Name, Key) in opentkKeys.Where(d => d.Name == imgui.Name))
+            {
+                mapping[Key] = imgui.Key;
+            }
+        }
+
+        mapping[Keys.Left] = ImGuiKey.LeftArrow;
+        mapping[Keys.Right] = ImGuiKey.RightArrow;
+        mapping[Keys.Up] = ImGuiKey.UpArrow;
+        mapping[Keys.Down] = ImGuiKey.DownArrow;
+        for (int i = 0; i < 10; i++)
+        {
+            mapping[Keys.D0 + i] = ImGuiKey._0 + i;
+        }
+
+        return mapping;
+    }
 }

@@ -13,7 +13,8 @@ Console.WriteLine("Running on OpenGL API v" + window.APIVersion);
 //DebugOutputGL debugOutput = new();
 //debugOutput.DebugEvent += (_, args) => Console.WriteLine(args.Message);
 using ImGuiFacade gui = new(window);
-gui.LoadFontDroidSans(24);
+gui.LoadFontDroidSans(12 * gui.WindowScale);
+
 
 window.KeyDown += args =>
 {
@@ -29,6 +30,8 @@ buffer.Set(triangles);
 using VertexArray vertexArray = new();
 vertexArray.BindAttribute(0, buffer, 2, Vector2.SizeInBytes, VertexAttribType.Float);*/
 
+
+
 window.RenderFrame += args =>
 {
     GL.ClearColor(new Color4(0, 32, 48, 255));
@@ -41,7 +44,6 @@ window.RenderFrame += args =>
 window.RenderFrame += args =>
 {
     ImGui.NewFrame(); // call each frame before any ImGui.* calls
-
     ImGui.ShowDemoWindow();
 
     ImGui.Begin("Style");
@@ -66,10 +68,10 @@ window.RenderFrame += args =>
     }
 
     ImGui.End();
-    gui.Render(window.ClientSize);
+    gui.Render(window.FramebufferSize);
 };
 window.RenderFrame += _ => window.SwapBuffers();
-window.Resize += (window) => GL.Viewport(0, 0, window.Width, window.Height);
+window.Resize += (_) => GL.Viewport(0, 0, window.FramebufferSize.X, window.FramebufferSize.Y);
 
 window.Run();
 
@@ -86,7 +88,7 @@ static void InputUI()
     }
 
     var io = ImGui.GetIO();
-    io.FontGlobalScale += 0.1f * io.MouseWheel;
+    //io.FontGlobalScale += 0.1f * io.MouseWheel;
 
     ImGui.Text($"{nameof(io.MousePos)}:{io.MousePos}");
 }

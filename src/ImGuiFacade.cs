@@ -2,6 +2,7 @@
 using ImGuiNET;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
+using Vector2 = System.Numerics.Vector2;
 
 namespace Zenseless.OpenTK.GUI;
 
@@ -10,6 +11,8 @@ namespace Zenseless.OpenTK.GUI;
 /// </summary>
 public class ImGuiFacade : IDisposable
 {
+    public float WindowScale => _input.WindowScale;
+    
     /// <summary>
     /// Create a new instance.
     /// </summary>
@@ -39,8 +42,8 @@ public class ImGuiFacade : IDisposable
     /// <param name="sizePixels">Intented size in pixels. Bigger means bigger texture is created.</param>
     public void LoadFontDroidSans(float sizePixels)
     {
-        //var resDir = new ShortestMatchResourceDirectory(new EmbeddedResourceDirectory());
-        //LoadFontTTF(resDir.Resource("DroidSans.ttf").AsByteArray(), sizePixels);
+        var resDir = new ShortestMatchResourceDirectory(new EmbeddedResourceDirectory());;
+        LoadFontTTF(resDir.Resource("DroidSans.ttf").AsByteArray(), sizePixels);
     }
     
 #pragma warning disable IDE0052
