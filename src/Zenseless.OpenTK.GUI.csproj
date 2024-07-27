@@ -18,7 +18,7 @@
     <Company>none</Company>
     <Authors>Daniel Scherzer, Twometer</Authors>
     <Copyright>Copyright © 2024 Daniel Scherzer, Twometer</Copyright>
-    <Version>0.2.0</Version>
+    <Version>0.2.1</Version>
     <RepositoryUrl>https://github.com/Twometer/Zenseless.OpenTK.GUI</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>

@@ -4,6 +4,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Zenseless.OpenTK.GUI;
 
@@ -39,7 +40,7 @@ public class ImGuiInput
         window.MouseUp += args => MouseEvent(args.Button, false);
         window.MouseMove += args =>
         {
-            var scale = WindowScale;
+            var scale = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? WindowScale : 1.0f; // Only macOS needs special mouse event scaling
             io.AddMousePosEvent(args.X * scale, args.Y * scale);
         };
         window.MouseWheel += args => io.AddMouseWheelEvent(args.OffsetX, args.OffsetY);
