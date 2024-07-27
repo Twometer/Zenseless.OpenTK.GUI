@@ -1,4 +1,7 @@
 # ImGui for OpenTK
+
+> **Note**: This is a fork from Zenseless.OpenTK.GUI that makes the library work on macOS (and other systems targetting OpenGL 4.1), as well as makes it work stand-alone without the Zenseless.OpenTK dependencies.
+
 [![Build status](https://ci.appveyor.com/api/projects/status/usuak3awe9kx495u?svg=true)](https://ci.appveyor.com/project/danielscherzer/zenseless-opentk-gui)
 [![NuGet](https://img.shields.io/nuget/v/Zenseless.OpenTK.GUI.svg)](https://www.nuget.org/packages/Zenseless.ContentPipeline/)
 
