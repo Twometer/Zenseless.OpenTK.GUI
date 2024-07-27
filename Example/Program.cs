@@ -7,7 +7,7 @@ using System;
 using Zenseless.OpenTK.GUI;
 
 using GameWindow window = new(GameWindowSettings.Default,
-    new NativeWindowSettings() { APIVersion = new Version(4, 1) });
+    new NativeWindowSettings { APIVersion = new Version(3, 2) });
 Console.WriteLine("Running on OpenGL API v" + window.APIVersion);
 
 //DebugOutputGL debugOutput = new();
