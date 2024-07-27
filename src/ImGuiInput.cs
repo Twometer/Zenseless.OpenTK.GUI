@@ -12,7 +12,7 @@ namespace Zenseless.OpenTK.GUI;
 /// </summary>
 public class ImGuiInput
 {
-    private GameWindow _gameWindow;
+    private readonly GameWindow _gameWindow;
 
     internal float WindowScale => _gameWindow.TryGetCurrentMonitorScale(out var horiz, out var vert)
         ? Math.Max(horiz, vert)

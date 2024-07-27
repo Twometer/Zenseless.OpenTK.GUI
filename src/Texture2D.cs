@@ -3,11 +3,11 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Zenseless.OpenTK.GUI;
 
-public class Texture2D : IDisposable
+internal class Texture2D : IDisposable
 {
-    public int Handle { get; }
+    internal int Handle { get; }
 
-    public TextureWrapMode WrapMode
+    internal TextureWrapMode WrapMode
     {
         set
         {
@@ -16,17 +16,17 @@ public class Texture2D : IDisposable
         }
     }
 
-    public TextureMinFilter MinFilter
+    internal TextureMinFilter MinFilter
     {
         set => GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)value);
     }
 
-    public TextureMagFilter MagFilter
+    internal TextureMagFilter MagFilter
     {
         set => GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)value);
     }
 
-    public Texture2D(int width, int height, SizedInternalFormat format, int mipmaps)
+    internal Texture2D(int width, int height, SizedInternalFormat format, int mipmaps)
     {
         Handle = GL.GenTexture();
         GL.BindTexture(TextureTarget.Texture2D, Handle);

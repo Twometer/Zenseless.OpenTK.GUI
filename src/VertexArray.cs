@@ -1,14 +1,13 @@
 using System;
 using OpenTK.Graphics.OpenGL4;
 
-
 namespace Zenseless.OpenTK.GUI;
 
-public class VertexArray : IDisposable
+internal class VertexArray : IDisposable
 {
-    public int Handle { get; }
+    private int Handle { get; }
 
-    public VertexArray()
+    internal VertexArray()
     {
         Handle = GL.GenVertexArray();
     }
@@ -17,7 +16,7 @@ public class VertexArray : IDisposable
     {
         GL.BindVertexArray(Handle);
     }
-    
+
     public void Dispose()
     {
         GL.DeleteVertexArray(Handle);

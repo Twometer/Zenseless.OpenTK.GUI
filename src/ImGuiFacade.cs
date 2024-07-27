@@ -11,6 +11,9 @@ namespace Zenseless.OpenTK.GUI;
 /// </summary>
 public class ImGuiFacade : IDisposable
 {
+    /// <summary>
+    /// Current monitor's scaling factor
+    /// </summary>
     public float WindowScale => _input.WindowScale;
     
     /// <summary>
